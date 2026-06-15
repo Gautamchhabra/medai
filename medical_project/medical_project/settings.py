@@ -14,7 +14,7 @@ SECRET_KEY =os.environ.get('DJANGO_SECRET_KEY', 'fallback-secret-key-for-dev')
 
 DEBUG = False
 
-ALLOWED_HOSTS =  ['yourusername.pythonanywhere.com', 'www.yourusername.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS =  ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
