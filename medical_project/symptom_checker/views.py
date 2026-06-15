@@ -11,7 +11,6 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 # Replace the huggingface_hub import with openai
-from openai import OpenAI
 from .models import SymptomHistory, EmergencyContact, UserProfile
 from .forms import LoginForm, RegisterForm, UserProfileForm, EmergencyContactForm
 
@@ -230,7 +229,7 @@ Provide analysis in this exact HTML format (respond ONLY with HTML, no other tex
 
     try:
         # Use Hugging Face's OpenAI-compatible endpoint
-        client = OpenAI(
+        client = InferenceClient(
             base_url="https://router.huggingface.co/v1",
             api_key=settings.HF_TOKEN,
         )
