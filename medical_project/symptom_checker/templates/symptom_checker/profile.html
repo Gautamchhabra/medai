@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --accent: #ff9800;
+            --danger: #f44336;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid var(--border);
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ PROFILE HEADER ============ */
+        .profile-header {
+            background: linear-gradient(135deg, #00695c, #009688);
+            border-radius: var(--radius);
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 250px;
+            height: 250px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 15px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .profile-header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-header p {
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            font-size: 0.95rem;
+        }
+
+        .member-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ SECTION CARD ============ */
+        .section-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .section-header i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* ============ FORM ============ */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 6px;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-group label i {
+            color: var(--primary);
+            width: 18px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.93rem;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: #fafafa;
+            color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0,150,136,0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-group select {
+            cursor: pointer;
+        }
+
+        .form-group .help-text {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .btn-save {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,150,136,0.4);
+        }
+
+        /* ============ ACCOUNT INFO ============ */
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .info-icon-small.email { background: #e3f2fd; color: #1565c0; }
+        .info-icon-small.user { background: #e8f5e9; color: #2e7d32; }
+        .info-icon-small.calendar { background: #fff3e0; color: #e65100; }
+
+        .info-content h4 {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .info-content p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ============ STATS ROW ============ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-mini {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-mini .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-mini .stat-label {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .profile-header {
+                padding: 25px 20px;
+            }
+            .profile-header h1 {
+                font-size: 1.4rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">👤 My Profile</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'emergency' %}" class="nav-btn">
+                <i class="fas fa-ambulance"></i> <span>Emergency</span>
+            </a>
+            <a href="{% url 'history' %}" class="nav-btn">
+                <i class="fas fa-history"></i> <span>History</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar-large">
+                {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+            </div>
+            <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+            <p>@{{ user.username }}</p>
+            <span class="member-badge"><i class="fas fa-crown"></i> Member</span>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-row">
+            <div class="stat-mini">
+                <div class="stat-value">{{ user.symptom_histories.count }}</div>
+                <div class="stat-label">Total Checks</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-value">{{ user.emergency_contacts.count }}</div>
+                <div class="stat-label">Contacts</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-value">📅</div>
+                <div class="stat-label">{{ user.date_joined|date:"M Y" }}</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-value">🟢</div>
+                <div class="stat-label">Active</div>
+            </div>
+        </div>
+
+        <!-- Account Information -->
+        <div class="section-card">
+            <div class="section-header">
+                <i class="fas fa-id-card"></i> Account Information
+            </div>
+            <div class="info-row">
+                <div class="info-icon-small user"><i class="fas fa-user"></i></div>
+                <div class="info-content">
+                    <h4>Username</h4>
+                    <p>@{{ user.username }}</p>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon-small email"><i class="fas fa-envelope"></i></div>
+                <div class="info-content">
+                    <h4>Email Address</h4>
+                    <p>{{ user.email|default:"Not added" }}</p>
+                </div>
+            </div>
+            <div class="info-row">
+                <div class="info-icon-small calendar"><i class="fas fa-calendar-alt"></i></div>
+                <div class="info-content">
+                    <h4>Member Since</h4>
+                    <p>{{ user.date_joined|date:"F d, Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Profile Form -->
+        <div class="section-card">
+            <div class="section-header">
+                <i class="fas fa-heartbeat"></i> Health Profile
+            </div>
+            <form method="POST" action="{% url 'profile' %}">
+                {% csrf_token %}
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Phone Number</label>
+                        {{ profile_form.phone }}
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-birthday-cake"></i> Date of Birth</label>
+                        {{ profile_form.date_of_birth }}
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-tint"></i> Blood Group</label>
+                        {{ profile_form.blood_group }}
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-weight"></i> Allergies</label>
+                        {{ profile_form.allergies }}
+                    </div>
+                    <div class="form-group full-width">
+                        <label><i class="fas fa-notes-medical"></i> Medical Conditions</label>
+                        {{ profile_form.medical_conditions }}
+                        <span class="help-text">List any existing medical conditions (optional)</span>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-user-shield"></i> Emergency Contact Name</label>
+                        {{ profile_form.emergency_contact_name }}
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-phone-alt"></i> Emergency Contact Phone</label>
+                        {{ profile_form.emergency_contact_phone }}
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</body>
+</html>

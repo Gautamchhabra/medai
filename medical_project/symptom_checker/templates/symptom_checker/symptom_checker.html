@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symptom Checker | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --accent: #ff9800;
+            --danger: #f44336;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .download-report-btn {
+    display: none;
+    padding: 12px 25px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 15px;
+}
+
+.download-report-btn.active {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn-outline {
+            border: 2px solid var(--border);
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-btn-primary {
+            background: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #00695c, #009688);
+            border-radius: var(--radius);
+            padding: 30px 35px;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .hero p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        /* ============ MAIN CARD ============ */
+        .main-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 35px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group textarea {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 140px;
+            transition: all 0.3s;
+            background: #fafafa;
+            line-height: 1.6;
+        }
+
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0,150,136,0.1);
+        }
+
+        .input-group .hint {
+            color: var(--text-light);
+            font-size: 0.82rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .example-symptoms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .example-tag {
+            padding: 6px 14px;
+            background: #f0faf9;
+            border: 1px solid #b2dfdb;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--primary-dark);
+            font-weight: 500;
+        }
+
+        .example-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-analyze {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,150,136,0.4);
+        }
+
+        .btn-analyze:disabled {
+            background: #bdbdbd;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ============ LOADER ============ */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loader.active { display: block; }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader p {
+            color: var(--text-light);
+        }
+
+        /* ============ RESULTS ============ */
+        .results {
+            display: none;
+            margin-top: 25px;
+        }
+
+        .results.active { display: block; }
+
+        .result-section {
+            background: #f9fbfb;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-left: 5px solid var(--primary);
+            animation: fadeIn 0.4s ease;
+        }
+
+        .result-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 14px;
+            font-size: 1.15rem;
+        }
+
+        .result-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .result-section ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e8f5e9;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .result-section ul li:last-child {
+            border-bottom: none;
+        }
+
+        .result-section ul li strong {
+            color: var(--dark);
+        }
+
+        .disclaimer-box {
+            background: #fff3e0;
+            border: 2px solid var(--accent);
+            border-radius: 14px;
+            padding: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .disclaimer-box p {
+            color: #e65100;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border: 2px solid var(--danger);
+            border-radius: 14px;
+            padding: 20px;
+            color: #c62828;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============ INFO CARDS ============ */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .info-card .info-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .info-card h4 {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .info-card p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .main-card {
+                padding: 20px;
+            }
+            .hero {
+                padding: 20px;
+            }
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">🩺 Symptom Checker</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'health_tips' %}" class="nav-btn nav-btn-outline">
+                <i class="fas fa-lightbulb"></i> <span>Health Tips</span>
+            </a>
+            <a href="{% url 'history' %}" class="nav-btn nav-btn-outline">
+                <i class="fas fa-history"></i> <span>History</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-btn nav-btn-primary">
+                <i class="fas fa-ambulance"></i> <span>Emergency</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>🔍 AI Symptom Analyzer</h1>
+            <p>Describe your symptoms in detail for an AI-powered analysis</p>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-icon">🤖</div>
+                <h4>AI-Powered</h4>
+                <p>Advanced medical AI analysis</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🔒</div>
+                <h4>Private & Secure</h4>
+                <p>Your data stays with you</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">⚡</div>
+                <h4>Fast Results</h4>
+                <p>Get analysis in seconds</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">🎓</div>
+                <h4>Educational</h4>
+                <p>For learning purposes only</p>
+            </div>
+        </div>
+
+        <!-- Main Input Card -->
+        <div class="main-card">
+            <form id="symptomForm">
+                <div class="input-group">
+                    <label for="symptoms">
+                        <i class="fas fa-notes-medical" style="color: var(--primary);"></i> Describe Your Symptoms
+                    </label>
+                    <textarea 
+                        id="symptoms" 
+                        name="symptoms" 
+                        placeholder="Example: I have a severe headache on the left side of my head since yesterday evening. The pain is throbbing and gets worse with bright light. I also feel slightly nauseous and have mild fever (99.5°F)..."
+                    ></textarea>
+                    <p class="hint">
+                        <i class="fas fa-info-circle"></i> 
+                        Include: when it started, severity, location, triggers, and any other relevant details
+                    </p>
+                    <div class="example-symptoms">
+                        <span class="example-tag" onclick="fillExample('headache')">🤕 Headache</span>
+                        <span class="example-tag" onclick="fillExample('fever')">🌡️ Fever</span>
+                        <span class="example-tag" onclick="fillExample('cough')">🫁 Cough & Cold</span>
+                        <span class="example-tag" onclick="fillExample('stomach')">🤢 Stomach Pain</span>
+                        <span class="example-tag" onclick="fillExample('back')">🦴 Back Pain</span>
+                        <span class="example-tag" onclick="fillExample('skin')">🩹 Skin Rash</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-analyze" id="analyzeBtn">
+                    <i class="fas fa-search"></i> Analyze Symptoms
+                </button>
+            </form>
+
+            <!-- Loader -->
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+                <p><strong>Analyzing your symptoms...</strong></p>
+                <p style="font-size: 0.85rem;">This may take a few seconds</p>
+            </div>
+
+            <!-- Results -->
+            <!-- Results -->
+<div class="results" id="results"></div>
+
+<!-- Download Button (appears after analysis) -->
+<div style="text-align: center; margin-top: 15px;">
+    <button id="downloadBtn" class="download-btn" style="display: none;" onclick="downloadReport()">
+        <i class="fas fa-download"></i> Download PDF Report
+    </button>
+</div>
+        </div>
+
+    </div>
+
+    <script>
+        const form = document.getElementById('symptomForm');
+        const symptomsInput = document.getElementById('symptoms');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loader = document.getElementById('loader');
+        const resultsDiv = document.getElementById('results');
+
+        // Example fill function
+        function fillExample(type) {
+            const examples = {
+                'headache': 'I have a severe throbbing headache on one side of my head since yesterday. It gets worse with bright lights and loud sounds. I also feel nauseous.',
+                'fever': 'I have had a fever of around 101°F for the past 2 days. I feel weak, have body aches, chills, and loss of appetite.',
+                'cough': 'I have a persistent dry cough for 5 days. It gets worse at night. I also have a sore throat and mild chest congestion.',
+                'stomach': 'I have sharp pain in my lower abdomen since this morning. I feel bloated, have nausea, and lost my appetite.',
+                'back': 'I have dull lower back pain for 3 days. It gets worse when I sit for long periods or bend forward.',
+                'skin': 'I have red, itchy patches on my arms and neck since yesterday. The area is slightly swollen and warm to touch.'
+            };
+            symptomsInput.value = examples[type] || '';
+            symptomsInput.focus();
+        }
+
+        // Form submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const symptoms = symptomsInput.value.trim();
+
+            if (!symptoms) {
+                alert('Please enter your symptoms first.');
+                return;
+            }
+
+            if (symptoms.length < 10) {
+                alert('Please describe your symptoms in more detail (at least 10 characters).');
+                return;
+            }
+
+            // Show loader
+            analyzeBtn.disabled = true;
+            analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            loader.classList.add('active');
+            resultsDiv.classList.remove('active');
+            resultsDiv.innerHTML = '';
+
+            try {
+                const response = await fetch('/analyze/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ symptoms: symptoms })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    resultsDiv.innerHTML = data.analysis + 
+    '<div style="text-align: center; margin-top: 20px; padding: 15px; background: #e8f5e9; border-radius: 12px;">' +
+    '<p style="color: #2e7d32; font-weight: 600; margin: 0;">' +
+    '<i class="fas fa-check-circle"></i> Report saved! ' +
+    '<a href="/history/" style="color: #009688; font-weight: 700;">Go to History</a> to download PDF</p>' +
+    '</div>';
+                    resultsDiv.classList.add('active');
+                    resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="error-box">
+                            <p><i class="fas fa-exclamation-circle"></i> <strong>Error:</strong> ${data.error}</p>
+                        </div>
+                    `;
+                    resultsDiv.classList.add('active');
+                }
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="error-box">
+                        <p><i class="fas fa-exclamation-triangle"></i> <strong>Connection Error:</strong> Could not connect to the server. Please try again.</p>
+                    </div>
+                `;
+                resultsDiv.classList.add('active');
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-search"></i> Analyze Symptoms';
+                loader.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

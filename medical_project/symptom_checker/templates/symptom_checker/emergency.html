@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --danger: #f44336;
+            --danger-dark: #c62828;
+            --danger-light: #ffebee;
+            --accent: #ff9800;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid var(--border);
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ EMERGENCY BANNER ============ */
+        .emergency-banner {
+            background: linear-gradient(135deg, #c62828, #f44336);
+            border-radius: var(--radius);
+            padding: 30px;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .emergency-banner::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -15%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .emergency-banner .banner-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .emergency-banner h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .emergency-banner p {
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ SOS BUTTON ============ */
+        .sos-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .sos-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--danger);
+            color: white;
+            padding: 20px 50px;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 30px rgba(244,67,54,0.4);
+            animation: pulseSOS 1.5s infinite;
+        }
+
+        @keyframes pulseSOS {
+            0%, 100% { box-shadow: 0 8px 30px rgba(244,67,54,0.4); }
+            50% { box-shadow: 0 8px 50px rgba(244,67,54,0.8); }
+        }
+
+        .sos-btn:hover {
+            background: var(--danger-dark);
+            transform: scale(1.05);
+            animation: none;
+        }
+
+        /* ============ NATIONAL NUMBERS ============ */
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .emergency-number-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 22px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border-top: 4px solid var(--danger);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .emergency-number-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .number-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 12px;
+        }
+
+        .number-icon.ambulance { background: #ffebee; color: var(--danger); }
+        .number-icon.police { background: #e3f2fd; color: #1565c0; }
+        .number-icon.fire { background: #fff3e0; color: #e65100; }
+        .number-icon.women { background: #f3e5f5; color: #7b1fa2; }
+        .number-icon.child { background: #e8f5e9; color: #2e7d32; }
+        .number-icon.blood { background: #fce4ec; color: #c62828; }
+
+        .emergency-number-card h3 {
+            font-size: 1.5rem;
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .emergency-number-card p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .call-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 20px;
+            background: var(--danger);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .call-btn:hover {
+            background: var(--danger-dark);
+        }
+
+        /* ============ YOUR CONTACTS ============ */
+        .contacts-section {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .contacts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-add {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: var(--primary-dark);
+        }
+
+        .contact-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #fafafa;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .contact-card:hover {
+            background: #f5f5f5;
+        }
+
+        .contact-card.primary {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+        }
+
+        .contact-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .contact-card.primary .contact-avatar {
+            background: var(--accent);
+            color: white;
+        }
+
+        .contact-card:not(.primary) .contact-avatar {
+            background: #e0e0e0;
+            color: var(--text);
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-info h4 {
+            color: var(--dark);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .primary-badge {
+            background: var(--accent);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+        }
+
+        .contact-info p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .contact-call-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .contact-call-btn:hover {
+            background: var(--danger-dark);
+            transform: scale(1.1);
+        }
+
+        .no-contacts {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+        }
+
+        /* ============ ADD FORM ============ */
+        .add-form {
+            display: none;
+            background: #f9fbfb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .add-form.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,150,136,0.1);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+
+        .btn-submit {
+            padding: 10px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============ FIRST AID TIPS ============ */
+        .first-aid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .first-aid-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent);
+        }
+
+        .first-aid-card h4 {
+            color: var(--dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .first-aid-card p {
+            color: var(--text-light);
+            font-size: 0.88rem;
+            line-height: 1.6;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .emergency-banner {
+                padding: 20px;
+            }
+            .emergency-banner h1 {
+                font-size: 1.3rem;
+            }
+            .sos-btn {
+                padding: 16px 35px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">🚨 Emergency</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'symptom_checker' %}" class="nav-btn">
+                <i class="fas fa-stethoscope"></i> <span>Symptom Checker</span>
+            </a>
+            <a href="{% url 'history' %}" class="nav-btn">
+                <i class="fas fa-history"></i> <span>History</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Emergency Banner -->
+        <div class="emergency-banner">
+            <div class="banner-icon">🚨</div>
+            <h1>Emergency Help</h1>
+            <p>In case of a medical emergency, call immediately</p>
+        </div>
+
+        <!-- SOS Button -->
+        <div class="sos-section">
+            <a href="tel:108" class="sos-btn">
+                <i class="fas fa-phone-alt"></i> SOS - Call 108
+            </a>
+        </div>
+
+        <!-- National Emergency Numbers -->
+        <h3 class="section-title"><i class="fas fa-flag" style="color: #ff9800;"></i> India Emergency Numbers</h3>
+        <div class="emergency-grid">
+            <a href="tel:108" class="emergency-number-card">
+                <div class="number-icon ambulance"><i class="fas fa-ambulance"></i></div>
+                <h3>108</h3>
+                <p>Ambulance / Medical</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+            <a href="tel:100" class="emergency-number-card">
+                <div class="number-icon police"><i class="fas fa-shield-alt"></i></div>
+                <h3>100</h3>
+                <p>Police</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+            <a href="tel:101" class="emergency-number-card">
+                <div class="number-icon fire"><i class="fas fa-fire-extinguisher"></i></div>
+                <h3>101</h3>
+                <p>Fire Brigade</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+            <a href="tel:1091" class="emergency-number-card">
+                <div class="number-icon women"><i class="fas fa-female"></i></div>
+                <h3>1091</h3>
+                <p>Women Helpline</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+            <a href="tel:1098" class="emergency-number-card">
+                <div class="number-icon child"><i class="fas fa-child"></i></div>
+                <h3>1098</h3>
+                <p>Child Helpline</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+            <a href="tel:104" class="emergency-number-card">
+                <div class="number-icon blood"><i class="fas fa-tint"></i></div>
+                <h3>104</h3>
+                <p>Health Helpline</p>
+                <span class="call-btn"><i class="fas fa-phone"></i> Call Now</span>
+            </a>
+        </div>
+
+        <!-- Your Emergency Contacts -->
+        <div class="contacts-section">
+            <div class="contacts-header">
+                <h3 class="section-title" style="margin-bottom: 0;">
+                    <i class="fas fa-address-book" style="color: var(--primary);"></i> Your Emergency Contacts
+                </h3>
+                <button class="btn-add" onclick="toggleForm()">
+                    <i class="fas fa-plus"></i> Add Contact
+                </button>
+            </div>
+
+            <!-- Add Contact Form -->
+            <div class="add-form" id="addForm">
+                <form method="POST" action="{% url 'emergency' %}">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" name="name" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" name="phone" placeholder="+91 XXXXXXXXXX" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Relationship</label>
+                            <input type="text" name="relationship" placeholder="e.g., Spouse, Parent, Sibling" required>
+                        </div>
+                        <div class="form-group checkbox-group" style="align-self: flex-end;">
+                            <input type="checkbox" name="is_primary" id="is_primary">
+                            <label for="is_primary">Set as Primary Contact</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> Save Contact
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact List -->
+            {% if contacts %}
+                {% for contact in contacts %}
+                <div class="contact-card {% if contact.is_primary %}primary{% endif %}">
+                    <div class="contact-avatar">{{ contact.name.0|upper }}</div>
+                    <div class="contact-info">
+                        <h4>
+                            {{ contact.name }}
+                            {% if contact.is_primary %}
+                            <span class="primary-badge">Primary</span>
+                            {% endif %}
+                        </h4>
+                        <p>{{ contact.relationship }} • {{ contact.phone }}</p>
+                    </div>
+                    <div class="contact-actions">
+                        <a href="tel:{{ contact.phone }}" class="contact-call-btn" title="Call {{ contact.name }}">
+                            <i class="fas fa-phone"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="no-contacts">
+                <i class="fas fa-user-plus" style="font-size: 2rem; color: #ccc; display: block; margin-bottom: 10px;"></i>
+                <p>No emergency contacts added yet.</p>
+                <p style="font-size: 0.85rem;">Add family members or close friends to call quickly in emergencies.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Basic First Aid Tips -->
+        <h3 class="section-title"><i class="fas fa-first-aid" style="color: var(--accent);"></i> Basic First Aid Tips</h3>
+        <div class="first-aid-grid">
+            <div class="first-aid-card">
+                <h4>🩹 Minor Cuts & Scrapes</h4>
+                <p>Clean with water, apply antiseptic cream, cover with sterile bandage. Change dressing daily.</p>
+            </div>
+            <div class="first-aid-card">
+                <h4>🔥 Minor Burns</h4>
+                <p>Run cool water for 10-15 minutes. Do NOT apply ice. Cover with sterile gauze. No butter or oil.</p>
+            </div>
+            <div class="first-aid-card">
+                <h4>🦴 Sprains</h4>
+                <p>Follow RICE: Rest, Ice (20 min), Compression (elastic bandage), Elevation above heart level.</p>
+            </div>
+            <div class="first-aid-card">
+                <h4>😵 Fainting</h4>
+                <p>Lay person flat, elevate legs. Loosen tight clothing. If not breathing, start CPR and call 108.</p>
+            </div>
+            <div class="first-aid-card">
+                <h4>🤒 High Fever</h4>
+                <p>Remove excess clothing, give paracetamol, use cool compress on forehead. Seek medical help if above 104°F.</p>
+            </div>
+            <div class="first-aid-card">
+                <h4>🐍 Snake Bite</h4>
+                <p>Stay calm, immobilize bitten limb, remove jewelry near bite. Do NOT suck venom. Rush to hospital immediately.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleForm() {
+            document.getElementById('addForm').classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>

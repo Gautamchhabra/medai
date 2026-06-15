@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --accent: #ff9800;
+            --danger: #f44336;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        .download-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.download-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid var(--border);
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .nav-btn-primary {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ STATS ============ */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ============ SEARCH ============ */
+        .search-box {
+            background: white;
+            border-radius: var(--radius);
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-box i {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text);
+        }
+
+        .search-box input::placeholder {
+            color: #bbb;
+        }
+
+        /* ============ HISTORY LIST ============ */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary);
+        }
+
+        .history-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .history-header {
+            padding: 18px 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .history-header:hover {
+            background: #f9fbfb;
+        }
+
+        .history-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .history-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .history-date i {
+            color: var(--primary);
+        }
+
+        .history-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .history-symptoms {
+            flex: 1;
+            font-weight: 500;
+            color: var(--dark);
+            margin: 0 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+        }
+
+        .expand-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+
+        .history-card.open .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        .history-body {
+            display: none;
+            padding: 0 22px 22px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .history-card.open .history-body {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .history-body .original-symptoms {
+            background: #f9fbfb;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-style: italic;
+            color: var(--text-light);
+            border-left: 3px solid var(--accent);
+        }
+
+        .history-body .analysis-content {
+            margin-top: 15px;
+        }
+
+        .history-body .result-section {
+            background: #f9fbfb;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .history-body .result-section h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .history-body .result-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history-body .result-section ul li {
+            padding: 6px 0;
+            border-bottom: 1px solid #e8f5e9;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .history-body .result-section ul li:last-child {
+            border-bottom: none;
+        }
+
+        .history-body .disclaimer-box {
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            color: #e65100;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn:hover {
+            background: #ffebee;
+            color: var(--danger);
+        }
+
+        /* ============ EMPTY STATE ============ */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .btn-new-check {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-new-check:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .history-symptoms {
+                max-width: 150px;
+            }
+            .history-meta {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">📜 Symptom History</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'symptom_checker' %}" class="nav-btn nav-btn-primary">
+                <i class="fas fa-plus"></i> <span>New Check</span>
+            </a>
+            <a href="{% url 'health_tips' %}" class="nav-btn">
+                <i class="fas fa-lightbulb"></i> <span>Health Tips</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        {% if histories %}
+        
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-number">{{ histories|length }}</div>
+                <div class="stat-label">Total Checks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">📅</div>
+                <div class="stat-label">{{ histories.0.created_at|date:"M d, Y" }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">🕐</div>
+                <div class="stat-label">{{ histories.0.created_at|timesince }} ago</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">🩺</div>
+                <div class="stat-label">AI Analyzed</div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search your symptom history..." onkeyup="filterHistory()">
+        </div>
+
+        <!-- History List -->
+        <div class="history-list" id="historyList">
+            {% for history in histories %}
+            <div class="history-card" data-search="{{ history.symptoms|lower }}">
+                <div class="history-header" onclick="toggleCard(this)">
+                    <div class="history-meta">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+    <a href="{% url 'download_report' history.id %}" class="download-btn" onclick="event.stopPropagation();" title="Download PDF Report">
+        <i class="fas fa-download"></i> PDF
+    </a>
+    <i class="fas fa-chevron-down expand-icon"></i>
+</div>
+                        <span class="history-date">
+                            <i class="fas fa-calendar-alt"></i>
+                            {{ history.created_at|date:"M d, Y" }}
+                        </span>
+                        <span class="history-date">
+                            <i class="fas fa-clock"></i>
+                            {{ history.created_at|time:"h:i A" }}
+                        </span>
+                        <span class="history-badge">Check #{{ forloop.revcounter }}</span>
+                    </div>
+                    <span class="history-symptoms">{{ history.symptoms|truncatechars:80 }}</span>
+                    <i class="fas fa-chevron-down expand-icon"></i>
+                </div>
+                <div class="history-body">
+                    <div class="original-symptoms">
+                        <strong>📝 Your Symptoms:</strong><br>
+                        {{ history.symptoms }}
+                    </div>
+                    <div class="analysis-content">
+                        {{ history.analysis|safe }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% else %}
+
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-icon">📋</div>
+            <h3>No History Yet</h3>
+            <p>You haven't checked any symptoms yet. Start your first symptom analysis!</p>
+            <a href="{% url 'symptom_checker' %}" class="btn-new-check">
+                <i class="fas fa-stethoscope"></i> Check Symptoms Now
+            </a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        // Toggle card expand/collapse
+        function toggleCard(header) {
+            const card = header.parentElement;
+            card.classList.toggle('open');
+        }
+
+        // Search/filter history
+        function filterHistory() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.history-card');
+            
+            cards.forEach(card => {
+                const searchData = card.getAttribute('data-search');
+                if (searchData && searchData.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

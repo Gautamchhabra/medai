@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Tips | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV BAR ============ */
+        .top-nav {
+            background: white;
+            padding: 15px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .top-nav .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: #e0f2f1;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .nav-btn-outline {
+            border-color: #e0e0e0;
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #f0faf9;
+        }
+
+        .nav-btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,150,136,0.3);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 25px 20px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-radius: var(--radius);
+            padding: 35px 40px;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============ QUICK STATS ============ */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ============ CATEGORY TABS ============ */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ============ TIPS GRID ============ */
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .tip-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border-left: 5px solid transparent;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .tip-card.daily { border-left-color: #2196f3; }
+        .tip-card.nutrition { border-left-color: #4caf50; }
+        .tip-card.fitness { border-left-color: #ff9800; }
+        .tip-card.mental { border-left-color: #9c27b0; }
+        .tip-card.hygiene { border-left-color: #00bcd4; }
+        .tip-card.prevention { border-left-color: #f44336; }
+
+        .tip-card .tip-icon {
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 18px;
+        }
+
+        .tip-card.daily .tip-icon { background: #e3f2fd; }
+        .tip-card.nutrition .tip-icon { background: #e8f5e9; }
+        .tip-card.fitness .tip-icon { background: #fff3e0; }
+        .tip-card.mental .tip-icon { background: #f3e5f5; }
+        .tip-card.hygiene .tip-icon { background: #e0f7fa; }
+        .tip-card.prevention .tip-icon { background: #ffebee; }
+
+        .tip-card h3 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .tip-card p {
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .tip-card .tip-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+
+        .tip-card.daily .tip-category { background: #e3f2fd; color: #1565c0; }
+        .tip-card.nutrition .tip-category { background: #e8f5e9; color: #2e7d32; }
+        .tip-card.fitness .tip-category { background: #fff3e0; color: #e65100; }
+        .tip-card.mental .tip-category { background: #f3e5f5; color: #7b1fa2; }
+        .tip-card.hygiene .tip-category { background: #e0f7fa; color: #00838f; }
+        .tip-card.prevention .tip-category { background: #ffebee; color: #c62828; }
+
+        /* ============ BOTTOM NAV ============ */
+        .bottom-nav {
+            text-align: center;
+            margin-top: 35px;
+            padding: 20px;
+        }
+
+        .bottom-nav .btn-back-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            background: var(--primary);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,150,136,0.3);
+        }
+
+        .bottom-nav .btn-back-large:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,150,136,0.4);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 12px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .hero {
+                padding: 25px 20px;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION BAR ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">💡 Health Tips</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'symptom_checker' %}" class="nav-btn nav-btn-outline">
+                <i class="fas fa-stethoscope"></i> <span>Check Symptoms</span>
+            </a>
+            <a href="{% url 'general_medicines' %}" class="nav-btn nav-btn-outline">
+                <i class="fas fa-pills"></i> <span>Medicines</span>
+            </a>
+            <a href="{% url 'emergency' %}" class="nav-btn nav-btn-primary">
+                <i class="fas fa-ambulance"></i> <span>Emergency</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>💡 Daily Health Tips</h1>
+            <p>Small habits, big changes. Improve your well-being one tip at a time.</p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="stat-card">
+                <div class="stat-number">18+</div>
+                <div class="stat-label">Health Tips</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">6</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">🌟</div>
+                <div class="stat-label">Daily Featured</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">📱</div>
+                <div class="stat-label">Updated Weekly</div>
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterTips('all')">📋 All Tips</button>
+            <button class="tab-btn" onclick="filterTips('daily')">☀️ Daily Habits</button>
+            <button class="tab-btn" onclick="filterTips('nutrition')">🥗 Nutrition</button>
+            <button class="tab-btn" onclick="filterTips('fitness')">🏃 Fitness</button>
+            <button class="tab-btn" onclick="filterTips('mental')">🧘 Mental Health</button>
+            <button class="tab-btn" onclick="filterTips('hygiene')">🧼 Hygiene</button>
+            <button class="tab-btn" onclick="filterTips('prevention')">🛡️ Prevention</button>
+        </div>
+
+        <!-- Tips Grid -->
+        <div class="tips-grid" id="tipsGrid">
+            
+            <div class="tip-card daily" data-category="daily">
+                <div class="tip-icon">💧</div>
+                <h3>Stay Hydrated</h3>
+                <p>Drink at least 8-10 glasses of water daily. Carry a water bottle with you to remind yourself to sip throughout the day.</p>
+                <span class="tip-category">Daily Habits</span>
+            </div>
+
+            <div class="tip-card daily" data-category="daily">
+                <div class="tip-icon">😴</div>
+                <h3>Quality Sleep</h3>
+                <p>Aim for 7-9 hours of uninterrupted sleep every night. Maintain a consistent sleep schedule, even on weekends.</p>
+                <span class="tip-category">Daily Habits</span>
+            </div>
+
+            <div class="tip-card daily" data-category="daily">
+                <div class="tip-icon">📱</div>
+                <h3>Limit Screen Time</h3>
+                <p>Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds to reduce eye strain.</p>
+                <span class="tip-category">Daily Habits</span>
+            </div>
+
+            <div class="tip-card nutrition" data-category="nutrition">
+                <div class="tip-icon">🥗</div>
+                <h3>Balanced Diet</h3>
+                <p>Include a variety of fruits, vegetables, lean proteins, and whole grains in your meals for complete nutrition.</p>
+                <span class="tip-category">Nutrition</span>
+            </div>
+
+            <div class="tip-card nutrition" data-category="nutrition">
+                <div class="tip-icon">🥜</div>
+                <h3>Healthy Snacking</h3>
+                <p>Replace chips and biscuits with nuts, seeds, fruits, or yogurt. They provide energy and essential nutrients.</p>
+                <span class="tip-category">Nutrition</span>
+            </div>
+
+            <div class="tip-card nutrition" data-category="nutrition">
+                <div class="tip-icon">🍽️</div>
+                <h3>Portion Control</h3>
+                <p>Use smaller plates and bowls. Eat slowly and stop when you feel 80% full to avoid overeating.</p>
+                <span class="tip-category">Nutrition</span>
+            </div>
+
+            <div class="tip-card fitness" data-category="fitness">
+                <div class="tip-icon">🏃</div>
+                <h3>Regular Exercise</h3>
+                <p>Get at least 30 minutes of moderate physical activity 5 days a week. Brisk walking, cycling, or swimming are great options.</p>
+                <span class="tip-category">Fitness</span>
+            </div>
+
+            <div class="tip-card fitness" data-category="fitness">
+                <div class="tip-icon">🚶</div>
+                <h3>Take the Stairs</h3>
+                <p>Skip the elevator for short distances. Walking up stairs burns calories and strengthens your leg muscles.</p>
+                <span class="tip-category">Fitness</span>
+            </div>
+
+            <div class="tip-card fitness" data-category="fitness">
+                <div class="tip-icon">🧘</div>
+                <h3>Morning Stretching</h3>
+                <p>Spend 10 minutes stretching every morning. It improves flexibility, reduces stiffness, and boosts blood circulation.</p>
+                <span class="tip-category">Fitness</span>
+            </div>
+
+            <div class="tip-card mental" data-category="mental">
+                <div class="tip-icon">🧘</div>
+                <h3>Practice Meditation</h3>
+                <p>Even 5-10 minutes of daily meditation can reduce stress, improve focus, and enhance emotional well-being.</p>
+                <span class="tip-category">Mental Health</span>
+            </div>
+
+            <div class="tip-card mental" data-category="mental">
+                <div class="tip-icon">📖</div>
+                <h3>Read Daily</h3>
+                <p>Reading for 20 minutes a day stimulates your brain, reduces stress, and improves concentration and vocabulary.</p>
+                <span class="tip-category">Mental Health</span>
+            </div>
+
+            <div class="tip-card mental" data-category="mental">
+                <div class="tip-icon">👥</div>
+                <h3>Social Connection</h3>
+                <p>Spend quality time with family and friends. Strong social connections boost happiness and mental health.</p>
+                <span class="tip-category">Mental Health</span>
+            </div>
+
+            <div class="tip-card hygiene" data-category="hygiene">
+                <div class="tip-icon">🧼</div>
+                <h3>Hand Washing</h3>
+                <p>Wash hands with soap for at least 20 seconds, especially before eating, after using the restroom, and after being outside.</p>
+                <span class="tip-category">Hygiene</span>
+            </div>
+
+            <div class="tip-card hygiene" data-category="hygiene">
+                <div class="tip-icon">🪥</div>
+                <h3>Oral Hygiene</h3>
+                <p>Brush twice daily for 2 minutes and floss once a day. Good oral health prevents many systemic diseases.</p>
+                <span class="tip-category">Hygiene</span>
+            </div>
+
+            <div class="tip-card prevention" data-category="prevention">
+                <div class="tip-icon">🩺</div>
+                <h3>Annual Check-ups</h3>
+                <p>Schedule regular health check-ups even when you feel fine. Early detection saves lives.</p>
+                <span class="tip-category">Prevention</span>
+            </div>
+
+            <div class="tip-card prevention" data-category="prevention">
+                <div class="tip-icon">🚭</div>
+                <h3>Avoid Tobacco</h3>
+                <p>Smoking and tobacco use significantly increase the risk of cancer, heart disease, and respiratory problems.</p>
+                <span class="tip-category">Prevention</span>
+            </div>
+
+            <div class="tip-card prevention" data-category="prevention">
+                <div class="tip-icon">☀️</div>
+                <h3>Sun Protection</h3>
+                <p>Apply sunscreen (SPF 30+) before going out. Wear sunglasses and a hat to protect from harmful UV rays.</p>
+                <span class="tip-category">Prevention</span>
+            </div>
+
+            <div class="tip-card prevention" data-category="prevention">
+                <div class="tip-icon">💉</div>
+                <h3>Stay Vaccinated</h3>
+                <p>Keep your vaccinations up to date. Vaccines protect you and your community from preventable diseases.</p>
+                <span class="tip-category">Prevention</span>
+            </div>
+
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <a href="{% url 'dashboard' %}" class="btn-back-large">
+                <i class="fas fa-th-large"></i> Back to Dashboard
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        function filterTips(category) {
+            // Update active tab button
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter tip cards
+            const cards = document.querySelectorAll('.tip-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.4s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add fade-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>

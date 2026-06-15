@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Medicines | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --accent: #ff9800;
+            --danger: #f44336;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px solid var(--border);
+            color: var(--text);
+            background: white;
+        }
+
+        .nav-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #00695c, #009688);
+            border-radius: var(--radius);
+            padding: 30px 35px;
+            color: white;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .hero p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .hero .warning-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        /* ============ CATEGORY TABS ============ */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ============ MEDICINE GRID ============ */
+        .medicine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+        }
+
+        .medicine-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: all 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+
+        .medicine-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .medicine-card.pain { border-top-color: #f44336; }
+        .medicine-card.fever { border-top-color: #ff9800; }
+        .medicine-card.cold { border-top-color: #2196f3; }
+        .medicine-card.stomach { border-top-color: #8bc34a; }
+        .medicine-card.allergy { border-top-color: #9c27b0; }
+        .medicine-card.skin { border-top-color: #00bcd4; }
+        .medicine-card.vitamin { border-top-color: #4caf50; }
+        .medicine-card.antibiotic { border-top-color: #e91e63; }
+
+        .medicine-header {
+            padding: 22px 22px 0;
+        }
+
+        .medicine-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .medicine-card.pain .medicine-icon { background: #ffebee; }
+        .medicine-card.fever .medicine-icon { background: #fff3e0; }
+        .medicine-card.cold .medicine-icon { background: #e3f2fd; }
+        .medicine-card.stomach .medicine-icon { background: #f1f8e9; }
+        .medicine-card.allergy .medicine-icon { background: #f3e5f5; }
+        .medicine-card.skin .medicine-icon { background: #e0f7fa; }
+        .medicine-card.vitamin .medicine-icon { background: #e8f5e9; }
+        .medicine-card.antibiotic .medicine-icon { background: #fce4ec; }
+
+        .medicine-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .medicine-generic {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .medicine-category {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .medicine-card.pain .medicine-category { background: #ffebee; color: #c62828; }
+        .medicine-card.fever .medicine-category { background: #fff3e0; color: #e65100; }
+        .medicine-card.cold .medicine-category { background: #e3f2fd; color: #0d47a1; }
+        .medicine-card.stomach .medicine-category { background: #f1f8e9; color: #33691e; }
+        .medicine-card.allergy .medicine-category { background: #f3e5f5; color: #6a1b9a; }
+        .medicine-card.skin .medicine-category { background: #e0f7fa; color: #006064; }
+        .medicine-card.vitamin .medicine-category { background: #e8f5e9; color: #1b5e20; }
+        .medicine-card.antibiotic .medicine-category { background: #fce4ec; color: #880e4f; }
+
+        .medicine-body {
+            padding: 15px 22px 22px;
+        }
+
+        .medicine-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        .info-row i {
+            color: var(--primary);
+            width: 18px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .info-row strong {
+            color: var(--dark);
+        }
+
+        .brand-names {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .brand-tag {
+            padding: 4px 10px;
+            background: #f5f5f5;
+            border-radius: 15px;
+            font-size: 0.78rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* ============ DISCLAIMER ============ */
+        .disclaimer-footer {
+            background: #fff3e0;
+            border: 2px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 20px 25px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .disclaimer-footer p {
+            color: #e65100;
+            font-weight: 500;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .disclaimer-footer i {
+            font-size: 1.3rem;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .hero {
+                padding: 20px;
+            }
+            .hero h1 {
+                font-size: 1.4rem;
+            }
+            .medicine-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">💊 General Medicines</span>
+        </div>
+        <div class="nav-right">
+            <a href="{% url 'symptom_checker' %}" class="nav-btn">
+                <i class="fas fa-stethoscope"></i> <span>Symptom Checker</span>
+            </a>
+            <a href="{% url 'health_tips' %}" class="nav-btn">
+                <i class="fas fa-lightbulb"></i> <span>Health Tips</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <h1>💊 Common Medicines Guide</h1>
+            <p>Information about commonly used medicines in India</p>
+            <span class="warning-badge">⚠️ Educational Purpose Only - Not Medical Advice</span>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterMeds('all')">📋 All</button>
+            <button class="tab-btn" onclick="filterMeds('pain')">💢 Pain Relief</button>
+            <button class="tab-btn" onclick="filterMeds('fever')">🌡️ Fever</button>
+            <button class="tab-btn" onclick="filterMeds('cold')">😷 Cold & Cough</button>
+            <button class="tab-btn" onclick="filterMeds('stomach')">🤢 Stomach</button>
+            <button class="tab-btn" onclick="filterMeds('allergy')">🤧 Allergy</button>
+            <button class="tab-btn" onclick="filterMeds('skin')">🩹 Skin Care</button>
+            <button class="tab-btn" onclick="filterMeds('vitamin')">💪 Vitamins</button>
+        </div>
+
+        <!-- Medicine Grid -->
+        <div class="medicine-grid" id="medicineGrid">
+
+            <!-- Paracetamol -->
+            <div class="medicine-card fever pain" data-category="fever pain">
+                <div class="medicine-header">
+                    <div class="medicine-icon">💊</div>
+                    <div class="medicine-name">Paracetamol (Acetaminophen)</div>
+                    <div class="medicine-generic">Analgesic / Antipyretic</div>
+                    <span class="medicine-category">Fever & Pain</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Fever, headache, body ache, mild pain</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 500mg-650mg every 4-6 hours (max 4g/day)</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> Avoid with liver disease. Do not exceed dose.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Crocin</span>
+                        <span class="brand-tag">Dolo 650</span>
+                        <span class="brand-tag">Calpol</span>
+                        <span class="brand-tag">Pacimol</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ibuprofen -->
+            <div class="medicine-card pain fever" data-category="pain fever">
+                <div class="medicine-header">
+                    <div class="medicine-icon">💢</div>
+                    <div class="medicine-name">Ibuprofen</div>
+                    <div class="medicine-generic">NSAID (Non-Steroidal Anti-Inflammatory)</div>
+                    <span class="medicine-category">Pain & Inflammation</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Inflammation, dental pain, menstrual cramps, arthritis</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 200-400mg every 6-8 hours</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> Take with food. Avoid in stomach ulcers, kidney issues.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Brufen</span>
+                        <span class="brand-tag">Ibugesic</span>
+                        <span class="brand-tag">Combiflam</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cetirizine -->
+            <div class="medicine-card allergy cold" data-category="allergy cold">
+                <div class="medicine-header">
+                    <div class="medicine-icon">🤧</div>
+                    <div class="medicine-name">Cetirizine</div>
+                    <div class="medicine-generic">Antihistamine (2nd generation)</div>
+                    <span class="medicine-category">Allergy & Cold</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Allergies, runny nose, sneezing, itching, hives</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 10mg once daily</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> May cause mild drowsiness. Avoid alcohol.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Zyrtec</span>
+                        <span class="brand-tag">Cetzine</span>
+                        <span class="brand-tag">Alerid</span>
+                        <span class="brand-tag">Okacet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Antacid -->
+            <div class="medicine-card stomach" data-category="stomach">
+                <div class="medicine-header">
+                    <div class="medicine-icon">🤢</div>
+                    <div class="medicine-name">Antacid (Aluminum Hydroxide + Magnesium)</div>
+                    <div class="medicine-generic">Antacid / Anti-Gas</div>
+                    <span class="medicine-category">Stomach</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Acidity, heartburn, gas, indigestion</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 10-20ml after meals or as needed</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> Take 2 hrs apart from other medicines.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Digene</span>
+                        <span class="brand-tag">Gelusil</span>
+                        <span class="brand-tag">Eno</span>
+                        <span class="brand-tag">Mucaine</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORS -->
+            <div class="medicine-card stomach" data-category="stomach">
+                <div class="medicine-header">
+                    <div class="medicine-icon">💧</div>
+                    <div class="medicine-name">ORS (Oral Rehydration Salts)</div>
+                    <div class="medicine-generic">Electrolyte Replacement</div>
+                    <span class="medicine-category">Stomach</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Dehydration from diarrhea, vomiting, heat exhaustion</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 1 packet in 1 liter clean water, sip throughout day</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> Use clean drinking water. Discard after 24 hours.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Electral</span>
+                        <span class="brand-tag">ORS-L</span>
+                        <span class="brand-tag">Walyte</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vitamin C -->
+            <div class="medicine-card vitamin" data-category="vitamin">
+                <div class="medicine-header">
+                    <div class="medicine-icon">🍊</div>
+                    <div class="medicine-name">Vitamin C (Ascorbic Acid)</div>
+                    <div class="medicine-generic">Vitamin Supplement / Antioxidant</div>
+                    <span class="medicine-category">Vitamins</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Immunity boost, wound healing, iron absorption</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Dosage:</strong> 500mg-1000mg daily</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> High doses may cause stomach upset.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Limcee</span>
+                        <span class="brand-tag">Celimax</span>
+                        <span class="brand-tag">C-Lix</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clotrimazole -->
+            <div class="medicine-card skin" data-category="skin">
+                <div class="medicine-header">
+                    <div class="medicine-icon">🩹</div>
+                    <div class="medicine-name">Clotrimazole Cream</div>
+                    <div class="medicine-generic">Topical Antifungal</div>
+                    <span class="medicine-category">Skin Care</span>
+                </div>
+                <div class="medicine-body">
+                    <div class="medicine-info">
+                        <div class="info-row">
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>Uses:</strong> Fungal skin infections, ringworm, athlete's foot</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Application:</strong> Apply thin layer 2-3 times daily for 2-4 weeks</span>
+                        </div>
+                        <div class="info-row">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span><strong>Caution:</strong> For external use only. Complete full course.</span>
+                        </div>
+                    </div>
+                    <div class="brand-names">
+                        <span class="brand-tag">Candid</span>
+                        <span class="brand-tag">Surfaz</span>
+                        <span class="brand-tag">Clotrim</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer-footer">
+            <p>
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>DISCLAIMER:</strong> This medicine information is for <strong>educational purposes only</strong>. 
+                It is NOT a substitute for professional medical advice. Always consult a qualified doctor before taking any medication. 
+                Self-medication can be dangerous.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        function filterMeds(category) {
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter medicine cards
+            const cards = document.querySelectorAll('.medicine-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.4s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Add fade-in animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>

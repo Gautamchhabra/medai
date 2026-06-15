@@ -1,0 +1,560 @@
+{% extends 'symptom_checker/base.html' %}
+
+{% block title %}Dashboard | MediAI{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* ============ DASHBOARD SPECIFIC STYLES ============ */
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        margin-bottom: 30px;
+    }
+
+    .stat-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: var(--shadow);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        transition: var(--transition);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        flex-shrink: 0;
+    }
+
+    .stat-icon.blue {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .stat-icon.green {
+        background: #e8f5e9;
+        color: #388e3c;
+    }
+
+    .stat-icon.orange {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .stat-icon.red {
+        background: #fce4ec;
+        color: #d32f2f;
+    }
+
+    .stat-icon.purple {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+
+    .stat-info h3 {
+        font-size: 1.8rem;
+        color: var(--dark);
+        margin-bottom: 4px;
+    }
+
+    .stat-info p {
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    /* ============ WELCOME SECTION ============ */
+    .welcome-section {
+        background: linear-gradient(135deg, #009688, #00796b);
+        border-radius: var(--radius);
+        padding: 30px 35px;
+        color: white;
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .welcome-text p {
+        opacity: 0.9;
+        font-size: 1rem;
+    }
+
+    .welcome-time {
+        text-align: right;
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .welcome-time .time {
+        font-size: 2rem;
+        font-weight: 700;
+        opacity: 1;
+    }
+
+    /* ============ QUICK ACTIONS ============ */
+    .section-title {
+        font-size: 1.3rem;
+        color: var(--dark);
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-title i {
+        color: var(--primary);
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .action-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 22px;
+        box-shadow: var(--shadow);
+        text-align: center;
+        text-decoration: none;
+        color: var(--text);
+        transition: var(--transition);
+        border: 2px solid transparent;
+    }
+
+    .action-card:hover {
+        border-color: var(--primary);
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .action-card .action-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: 0 auto 12px;
+    }
+
+    .action-card h4 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+        color: var(--dark);
+    }
+
+    .action-card p {
+        font-size: 0.82rem;
+        color: var(--text-light);
+        line-height: 1.4;
+    }
+
+    /* ============ RECENT HISTORY ============ */
+    .recent-section {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 25px 30px;
+        box-shadow: var(--shadow);
+        margin-bottom: 30px;
+    }
+
+    .recent-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .recent-header h3 {
+        font-size: 1.2rem;
+        color: var(--dark);
+    }
+
+    .recent-header a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: var(--transition);
+    }
+
+    .recent-header a:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+
+    .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .history-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f9fbfb;
+        border-radius: var(--radius-sm);
+        border-left: 4px solid var(--primary-light);
+        transition: var(--transition);
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .history-item:hover {
+        background: #f0f7f6;
+        border-left-color: var(--primary);
+    }
+
+    .history-date {
+        font-size: 0.8rem;
+        color: var(--text-light);
+        white-space: nowrap;
+        min-width: 80px;
+    }
+
+    .history-symptoms {
+        flex: 1;
+        font-weight: 500;
+        color: var(--dark);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .history-arrow {
+        color: var(--primary);
+        font-size: 0.9rem;
+    }
+
+    .no-history {
+        text-align: center;
+        padding: 30px;
+        color: var(--text-light);
+    }
+
+    .no-history i {
+        font-size: 3rem;
+        display: block;
+        margin-bottom: 12px;
+        color: #ccc;
+    }
+
+    /* ============ EMERGENCY QUICK CONTACT ============ */
+    .emergency-quick {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 25px 30px;
+        box-shadow: var(--shadow);
+        border-top: 4px solid var(--danger);
+    }
+
+    .emergency-quick h3 {
+        color: var(--danger);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .emergency-contact-card {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        background: #fff5f5;
+        border-radius: var(--radius-sm);
+        margin-bottom: 10px;
+    }
+
+    .emergency-contact-card .contact-avatar {
+        width: 45px;
+        height: 45px;
+        background: var(--danger);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    .emergency-contact-card .contact-info h4 {
+        font-size: 1rem;
+        color: var(--dark);
+    }
+
+    .emergency-contact-card .contact-info p {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    .emergency-contact-card .contact-call {
+        margin-left: auto;
+        background: var(--danger);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: var(--transition);
+    }
+
+    .emergency-contact-card .contact-call:hover {
+        background: #b71c1c;
+        transform: scale(1.1);
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+        .welcome-section {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .welcome-time {
+            text-align: center;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .history-symptoms {
+            max-width: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-actions {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Welcome Section -->
+<div class="welcome-section">
+    <div class="welcome-text">
+        <h1>👋 Welcome back, {{ user.first_name }}!</h1>
+        <p>Your health dashboard is ready. What would you like to do today?</p>
+    </div>
+    <div class="welcome-time">
+        <div class="time" id="currentTime"></div>
+        <div id="currentDate"></div>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="dashboard-grid">
+    <a href="{% url 'symptom_checker' %}" class="stat-card">
+        <div class="stat-icon blue">
+            <i class="fas fa-stethoscope"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ total_checks }}</h3>
+            <p>Total Symptom Checks</p>
+        </div>
+    </a>
+
+    <a href="{% url 'history' %}" class="stat-card">
+        <div class="stat-icon green">
+            <i class="fas fa-history"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ recent_checks|length }}</h3>
+            <p>Recent Analyses</p>
+        </div>
+    </a>
+
+    <a href="{% url 'emergency' %}" class="stat-card">
+        <div class="stat-icon red">
+            <i class="fas fa-ambulance"></i>
+        </div>
+        <div class="stat-info">
+            <h3>{{ emergency_contacts|length }}</h3>
+            <p>Emergency Contacts</p>
+        </div>
+    </a>
+
+    <a href="{% url 'health_tips' %}" class="stat-card">
+        <div class="stat-icon orange">
+            <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="stat-info">
+            <h3>9+</h3>
+            <p>Health Tips Available</p>
+        </div>
+    </a>
+</div>
+
+<!-- Quick Actions -->
+<h3 class="section-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+<div class="quick-actions">
+    <a href="{% url 'symptom_checker' %}" class="action-card">
+        <div class="action-icon" style="background: #e3f2fd; color: #1976d2;">
+            <i class="fas fa-notes-medical"></i>
+        </div>
+        <h4>Check Symptoms</h4>
+        <p>Analyze your symptoms with AI</p>
+    </a>
+
+    <a href="{% url 'general_medicines' %}" class="action-card">
+        <div class="action-icon" style="background: #e8f5e9; color: #388e3c;">
+            <i class="fas fa-pills"></i>
+        </div>
+        <h4>General Medicines</h4>
+        <p>Common medicine information</p>
+    </a>
+
+    <a href="{% url 'health_tips' %}" class="action-card">
+        <div class="action-icon" style="background: #fff3e0; color: #f57c00;">
+            <i class="fas fa-heart"></i>
+        </div>
+        <h4>Health Tips</h4>
+        <p>Daily wellness advice</p>
+    </a>
+
+    <a href="{% url 'emergency' %}" class="action-card">
+        <div class="action-icon" style="background: #fce4ec; color: #d32f2f;">
+            <i class="fas fa-phone-alt"></i>
+        </div>
+        <h4>Emergency</h4>
+        <p>Quick emergency contacts</p>
+    </a>
+</div>
+
+<!-- Recent History -->
+<div class="recent-section">
+    <div class="recent-header">
+        <h3><i class="fas fa-clock" style="color: var(--primary);"></i> Recent Symptom Checks</h3>
+        <a href="{% url 'history' %}">View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    {% if recent_checks %}
+    <div class="history-list">
+        {% for check in recent_checks %}
+        <div class="history-item">
+            <span class="history-date">{{ check.created_at|date:"M d, Y" }}</span>
+            <span class="history-date" style="min-width:50px;">{{ check.created_at|time:"h:i A" }}</span>
+            <span class="history-symptoms">{{ check.symptoms|truncatechars:60 }}</span>
+            <i class="fas fa-chevron-right history-arrow"></i>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-history">
+        <i class="fas fa-clipboard-list"></i>
+        <p>No symptom checks yet. <a href="{% url 'symptom_checker' %}">Start your first check!</a></p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Emergency Quick Contact -->
+<div class="emergency-quick">
+    <h3><i class="fas fa-exclamation-triangle"></i> Emergency Contacts</h3>
+
+    {% if emergency_contacts %}
+        {% for contact in emergency_contacts %}
+        <div class="emergency-contact-card">
+            <div class="contact-avatar">
+                {{ contact.name.0|upper }}
+            </div>
+            <div class="contact-info">
+                <h4>{{ contact.name }} {% if contact.is_primary %}<span style="color:var(--danger); font-size:0.75rem;">● Primary</span>{% endif %}</h4>
+                <p>{{ contact.relationship }} • {{ contact.phone }}</p>
+            </div>
+            <a href="tel:{{ contact.phone }}" class="contact-call" title="Call {{ contact.name }}">
+                <i class="fas fa-phone"></i>
+            </a>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="no-history">
+        <i class="fas fa-user-shield"></i>
+        <p>No emergency contacts added. <a href="{% url 'emergency' %}">Add one now!</a></p>
+    </div>
+    {% endif %}
+
+    <!-- National Emergency Numbers -->
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+        <p style="font-weight: 600; color: var(--dark); margin-bottom: 10px;">
+            🚨 India Emergency Numbers:
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 0.9rem;">
+            <span><strong>Ambulance:</strong> 108</span>
+            <span><strong>Police:</strong> 100</span>
+            <span><strong>Fire:</strong> 101</span>
+            <span><strong>Women Helpline:</strong> 1091</span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Update current time
+    function updateTime() {
+        const now = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        
+        let hours = now.getHours();
+        let minutes = now.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        
+        document.getElementById('currentTime').textContent = hours + ':' + minutes + ' ' + ampm;
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('en-IN', options);
+    }
+    
+    updateTime();
+    setInterval(updateTime, 60000); // Update every minute
+</script>
+{% endblock %}

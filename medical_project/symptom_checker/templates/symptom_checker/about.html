@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #e0f2f1;
+            --accent: #ff9800;
+            --danger: #f44336;
+            --white: #ffffff;
+            --dark: #263238;
+            --text: #333;
+            --text-light: #666;
+            --border: #e0e0e0;
+            --shadow: 0 3px 15px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ TOP NAV ============ */
+        .top-nav {
+            background: white;
+            padding: 14px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 9px 16px;
+            border-radius: 10px;
+            background: var(--primary-light);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* ============ HERO ============ */
+        .hero {
+            background: linear-gradient(135deg, #263238, #37474f);
+            border-radius: var(--radius);
+            padding: 40px;
+            color: white;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .hero .logo-large {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .hero h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .hero .version {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        /* ============ SECTION CARD ============ */
+        .section-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        .section-card h2 {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-card h2 i {
+            color: var(--primary);
+        }
+
+        .section-card p {
+            color: var(--text-light);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+        }
+
+        /* ============ FEATURE LIST ============ */
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: #f9fbfb;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .feature-item:hover {
+            background: var(--primary-light);
+        }
+
+        .feature-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.green { background: #e8f5e9; color: #2e7d32; }
+        .feature-icon.blue { background: #e3f2fd; color: #1565c0; }
+        .feature-icon.orange { background: #fff3e0; color: #e65100; }
+        .feature-icon.purple { background: #f3e5f5; color: #7b1fa2; }
+        .feature-icon.red { background: #ffebee; color: #c62828; }
+        .feature-icon.teal { background: var(--primary-light); color: var(--primary-dark); }
+
+        .feature-text h4 {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .feature-text p {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-bottom: 0;
+        }
+
+        /* ============ DISCLAIMER BOX ============ */
+        .disclaimer-box {
+            background: #fff3e0;
+            border: 3px solid var(--accent);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .disclaimer-box h2 {
+            color: #e65100;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .disclaimer-box .disclaimer-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .disclaimer-box .disclaimer-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 10px 0;
+            color: #bf360c;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-bottom: 1px solid #ffe0b2;
+        }
+
+        .disclaimer-box .disclaimer-list li:last-child {
+            border-bottom: none;
+        }
+
+        .disclaimer-box .disclaimer-list li i {
+            color: var(--accent);
+            margin-top: 3px;
+        }
+
+        /* ============ TECH STACK ============ */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tech-tag {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ============ CONTACT ============ */
+        .contact-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .contact-item {
+            flex: 1;
+            min-width: 180px;
+            padding: 15px;
+            background: #f9fbfb;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .contact-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .contact-item h4 {
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-bottom: 3px;
+        }
+
+        .contact-item p {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .top-nav {
+                padding: 10px 15px;
+            }
+            .page-title {
+                font-size: 1rem;
+            }
+            .hero {
+                padding: 25px 20px;
+            }
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+            .section-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOP NAVIGATION ============ -->
+    <div class="top-nav">
+        <div class="nav-left">
+            <a href="{% url 'dashboard' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Dashboard
+            </a>
+            <span class="page-title">ℹ️ About & Disclaimer</span>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Hero -->
+        <div class="hero">
+            <div class="logo-large">🏥</div>
+            <h1>MediAI</h1>
+            <p>AI-Powered Health Assistant for Educational Purposes</p>
+            <span class="version">Version 1.0 • Educational Project</span>
+        </div>
+
+        <!-- About Section -->
+        <div class="section-card">
+            <h2><i class="fas fa-info-circle"></i> About This Project</h2>
+            <p>
+                <strong>MediAI</strong> is an educational project designed to demonstrate how artificial intelligence 
+                can be used to provide general health information. This application uses advanced AI models to analyze 
+                user-described symptoms and provide educational insights about possible conditions, general precautions, 
+                and commonly prescribed medications.
+            </p>
+            <p>
+                This project was built as a learning exercise to explore the integration of AI APIs with web applications. 
+                It showcases features like user authentication, symptom analysis, health history tracking, emergency contact 
+                management, and a comprehensive medicine information database.
+            </p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon teal"><i class="fas fa-stethoscope"></i></div>
+                    <div class="feature-text">
+                        <h4>Symptom Analysis</h4>
+                        <p>AI-powered symptom checking with detailed results</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon green"><i class="fas fa-pills"></i></div>
+                    <div class="feature-text">
+                        <h4>Medicine Database</h4>
+                        <p>Information on common medicines and their uses</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon blue"><i class="fas fa-history"></i></div>
+                    <div class="feature-text">
+                        <h4>Health History</h4>
+                        <p>Track and review your past symptom checks</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon orange"><i class="fas fa-lightbulb"></i></div>
+                    <div class="feature-text">
+                        <h4>Health Tips</h4>
+                        <p>Daily wellness advice and lifestyle suggestions</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon red"><i class="fas fa-ambulance"></i></div>
+                    <div class="feature-text">
+                        <h4>Emergency Contacts</h4>
+                        <p>Quick access to emergency numbers and personal contacts</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon purple"><i class="fas fa-user-shield"></i></div>
+                    <div class="feature-text">
+                        <h4>Profile Management</h4>
+                        <p>Manage your health profile and personal information</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer-box">
+            <h2><i class="fas fa-exclamation-triangle"></i> Important Disclaimer</h2>
+            <ul class="disclaimer-list">
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Not a Medical Device:</strong> This application is NOT a medical device and has not been evaluated by any medical regulatory authority including the FDA, CDSCO (India), or any other health agency.</span>
+                </li>
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Not Medical Advice:</strong> The information provided by this application is for <strong>educational and informational purposes only</strong>. It does NOT constitute medical advice, diagnosis, or treatment.</span>
+                </li>
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Consult a Doctor:</strong> Always consult a licensed healthcare professional for proper diagnosis and treatment of any medical condition. Do not delay seeking medical help based on information from this app.</span>
+                </li>
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>No Self-Medication:</strong> Do NOT self-medicate based on the medication suggestions provided. Medications should only be taken under the guidance of a qualified doctor.</span>
+                </li>
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>AI Limitations:</strong> The AI model may produce inaccurate or incomplete information. Results should be verified with professional medical sources.</span>
+                </li>
+                <li>
+                    <i class="fas fa-times-circle"></i>
+                    <span><strong>Emergency:</strong> In case of a medical emergency, call 108 (India) or your local emergency number immediately. Do not rely on this application for emergency situations.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Technology -->
+        <div class="section-card">
+            <h2><i class="fas fa-code"></i> Technology Stack</h2>
+            <div class="tech-tags">
+                <span class="tech-tag"><i class="fab fa-python"></i> Django 6.0</span>
+                <span class="tech-tag"><i class="fas fa-database"></i> SQLite</span>
+                <span class="tech-tag"><i class="fas fa-brain"></i> Hugging Face AI</span>
+                <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                <span class="tech-tag"><i class="fab fa-js"></i> JavaScript</span>
+                <span class="tech-tag"><i class="fas fa-font-awesome"></i> Font Awesome</span>
+                <span class="tech-tag"><i class="fas fa-mobile-alt"></i> Responsive Design</span>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="section-card">
+            <h2><i class="fas fa-envelope"></i> Contact</h2>
+            <p>This is an educational project. For questions or feedback about this application:</p>
+            <div class="contact-row">
+                <a href="mailto:project@example.com" class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h4>Email</h4>
+                    <p>project@example.com</p>
+                </a>
+                <a href="https://github.com" target="_blank" class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <h4>GitHub</h4>
+                    <p>View Source Code</p>
+                </a>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h4>Location</h4>
+                    <p>India</p>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 10px; padding: 20px;">
+            &copy; 2026 MediAI • Educational Project • All Rights Reserved
+        </p>
+
+    </div>
+
+</body>
+</html>x

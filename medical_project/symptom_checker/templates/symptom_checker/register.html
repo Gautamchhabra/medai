@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | MediAI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            display: flex;
+            max-width: 1050px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        /* Left Side - Branding */
+        .auth-brand {
+            flex: 1;
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-brand::before {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -30%;
+            width: 80%;
+            height: 80%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .auth-brand .brand-logo {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .auth-brand h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .auth-brand p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .auth-brand .benefits {
+            margin-top: 35px;
+            list-style: none;
+        }
+
+        .auth-brand .benefits li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 0.95rem;
+        }
+
+        .auth-brand .benefits li i {
+            font-size: 1.1rem;
+        }
+
+        /* Right Side - Form */
+        .auth-form {
+            flex: 1.2;
+            padding: 40px 45px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-form .form-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .auth-form .form-header h2 {
+            font-size: 1.8rem;
+            color: #263238;
+            margin-bottom: 8px;
+        }
+
+        .auth-form .form-header p {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .form-group .input-wrapper {
+            position: relative;
+        }
+
+        .form-group .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 14px 12px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: #fafafa;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #43a047;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1);
+        }
+
+        .form-group input:focus ~ i {
+            color: #43a047;
+        }
+
+        .form-group .error {
+            color: #f44336;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+
+        .form-group .help-text {
+            color: #999;
+            font-size: 0.72rem;
+            margin-top: 4px;
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+            color: #666;
+        }
+
+        .terms input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: #43a047;
+            width: 16px;
+            height: 16px;
+        }
+
+        .terms a {
+            color: #43a047;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46, 125, 50, 0.4);
+        }
+
+        .auth-footer {
+            text-align: center;
+            color: #777;
+            font-size: 0.88rem;
+            margin-top: 20px;
+        }
+
+        .auth-footer a {
+            color: #43a047;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Messages */
+        .messages {
+            margin-bottom: 18px;
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+                max-width: 480px;
+            }
+
+            .auth-brand {
+                padding: 25px 20px;
+                text-align: center;
+            }
+
+            .auth-brand .benefits {
+                display: none;
+            }
+
+            .auth-form {
+                padding: 25px 20px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <!-- Brand Side -->
+        <div class="auth-brand">
+            <div class="brand-logo">🩺</div>
+            <h1>Join MediAI</h1>
+            <p>Create your free account and start your health journey with AI-powered insights.</p>
+            <ul class="benefits">
+                <li><i class="fas fa-star"></i> Free unlimited symptom checks</li>
+                <li><i class="fas fa-star"></i> Save your health history</li>
+                <li><i class="fas fa-star"></i> Emergency contact management</li>
+                <li><i class="fas fa-star"></i> Personalized health recommendations</li>
+            </ul>
+        </div>
+
+        <!-- Form Side -->
+        <div class="auth-form">
+            <div class="form-header">
+                <h2>📝 Create Account</h2>
+                <p>Fill in the details to get started</p>
+            </div>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-exclamation-circle"></i>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first_name">First Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="first_name" id="first_name" placeholder="John" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Last Name</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" name="last_name" id="last_name" placeholder="Doe" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-at"></i>
+                        <input type="text" name="username" id="username" placeholder="Choose a username" required>
+                    </div>
+                    <span class="help-text">Letters, digits and @/./+/-/_ only</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" id="email" placeholder="john@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password1">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password1" id="password1" placeholder="Create password" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" name="password2" id="password2" placeholder="Confirm password" required>
+                        </div>
+                    </div>
+                </div>
+                <span class="help-text" style="margin-top: -10px; display: block;">At least 8 characters, can't be entirely numeric</span>
+
+                <div class="terms" style="margin-top: 15px;">
+                    <input type="checkbox" id="agree" required>
+                    <label for="agree">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I understand this is an educational tool, not a real medical diagnostic system.</label>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="{% url 'login' %}">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

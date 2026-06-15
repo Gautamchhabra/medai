@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MediAI{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #009688;
+            --primary-dark: #00796b;
+            --primary-light: #b2dfdb;
+            --danger: #f44336;
+            --dark: #263238;
+            --white: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.08);
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f4;
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ============ NAVBAR ============ */
+        .navbar {
+            background: var(--white);
+            height: 65px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 15px;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--dark);
+            font-size: 1.2rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 4px;
+            flex: 1;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-links::-webkit-scrollbar { display: none; }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1.5px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1.5px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: var(--text);
+            padding: 6px;
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-content {
+            margin-top: 65px;
+            padding: 25px 20px;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* ============ MESSAGES ============ */
+        .messages-container {
+            position: fixed;
+            top: 75px;
+            right: 15px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-width: 380px;
+        }
+
+        .alert {
+            padding: 14px 18px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.85rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success { background: #4caf50; }
+        .alert-error, .alert-danger { background: #f44336; }
+        .alert-warning { background: #ff9800; }
+        .alert-info { background: #2196f3; }
+
+        @keyframes slideIn {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 65px;
+                left: 0;
+                right: 0;
+                background: white;
+                flex-direction: column;
+                padding: 12px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+                max-height: 70vh;
+                overflow-y: auto;
+                border-radius: 0 0 15px 15px;
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .user-info span {
+                display: none;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .navbar-brand span {
+                display: none;
+            }
+            
+            .main-content {
+                padding: 15px 10px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <!-- Toast Messages -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' or message.tags == 'danger' %}exclamation-circle{% elif message.tags == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!-- Brand -->
+        <a href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="navbar-brand">
+            <div class="brand-icon">🏥</div>
+            <span>MediAI</span>
+        </a>
+
+        <!-- Hamburger -->
+        <button class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('show')">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Nav Links -->
+        <ul class="nav-links" id="navLinks">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i> Dashboard
+            </a></li>
+            <li><a href="{% url 'symptom_checker' %}" class="{% if request.resolver_match.url_name == 'symptom_checker' %}active{% endif %}">
+                <i class="fas fa-stethoscope"></i> Symptom Checker
+            </a></li>
+            <li><a href="{% url 'general_medicines' %}" class="{% if request.resolver_match.url_name == 'general_medicines' %}active{% endif %}">
+                <i class="fas fa-pills"></i> Medicines
+            </a></li>
+            <li><a href="{% url 'health_tips' %}" class="{% if request.resolver_match.url_name == 'health_tips' %}active{% endif %}">
+                <i class="fas fa-lightbulb"></i> Health Tips
+            </a></li>
+            <li><a href="{% url 'history' %}" class="{% if request.resolver_match.url_name == 'history' %}active{% endif %}">
+                <i class="fas fa-history"></i> History
+            </a></li>
+            <li><a href="{% url 'emergency' %}" class="{% if request.resolver_match.url_name == 'emergency' %}active{% endif %}">
+                <i class="fas fa-ambulance"></i> Emergency
+            </a></li>
+            <li><a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                <i class="fas fa-user"></i> Profile
+            </a></li>
+            <li><a href="{% url 'about' %}" class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}">
+                <i class="fas fa-info-circle"></i> About
+            </a></li>
+            {% else %}
+            <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                <i class="fas fa-home"></i> Home
+            </a></li>
+            {% endif %}
+        </ul>
+
+        <!-- Right Side -->
+        <div class="nav-right">
+            {% if user.is_authenticated %}
+            <div class="user-info">
+                <div class="user-avatar">{{ user.first_name.0|upper }}{{ user.last_name.0|upper }}</div>
+                <span>{{ user.first_name }}</span>
+            </div>
+            <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline btn-sm">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+            <a href="{% url 'register' %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-user-plus"></i> Register
+            </a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        // Hide messages after 4 seconds
+        setTimeout(function() {
+            document.querySelectorAll('.alert').forEach(function(el) {
+                el.style.opacity = '0';
+                el.style.transition = 'opacity 0.4s';
+                setTimeout(function() { el.remove(); }, 400);
+            });
+        }, 4000);
+
+        // Close mobile nav when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                document.getElementById('navLinks').classList.remove('show');
+            });
+        });
+
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(e) {
+            var nav = document.getElementById('navLinks');
+            var hamburger = document.querySelector('.hamburger');
+            if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+                nav.classList.remove('show');
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
